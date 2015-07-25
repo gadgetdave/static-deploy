@@ -1,0 +1,10 @@
+<div ng-app="<?php echo $this->appName; ?>"><div ui-view></div></div>
+<?php
+if ($this->script) :
+?>
+<script type="text/javascript">
+<?php echo $this->script; ?>
+</script>
+<?php
+endif;
+?>

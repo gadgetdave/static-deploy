@@ -1,0 +1,51 @@
+<?php
+if (!$form) {
+    return;
+}
+// the following is adapted from TwbBundle\Form\View\Helper\TwbBundleForm - we
+// copy the code since the TwbBundleForm does not allow us to manually open
+// and close the form tags, which in turns means we wouldn't be able to use
+// the form_buttons partial as the buttons would exist outside the form tags
+$form->prepare();
+
+if (!$form->getAttribute('role')) {
+    $form->setAttribute('role', 'form');
+}
+
+$hasColumnSizes = false;
+$formContent = '';
+foreach ($form as $element) {
+    $elementOptions = $element->getOptions();
+    if (!$hasColumnSizes && !empty($elementOptions['column-size'])) {
+        $hasColumnSizes = true;
+    }
+
+    if ($formLayout && empty($elementOptions['twb-layout'])){
+        $elementOptions['twb-layout'] = $formLayout;
+        $element->setOptions($elementOptions);
+    }
+
+    // style checkboxes like bootstrap
+    if ($element instanceof \Zend\Form\Element\Checkbox
+        && !($element instanceof \Zend\Form\Element\Radio)
+        && !($element instanceof \Zend\Form\Element\MultiCheckbox)) {
+        $element->setLabel('<span>' . $element->getLabel() . '</span>')
+                ->setAttribute('class', 'checkbox style-0');
+    }
+
+    $formContent.= $element instanceof \Zend\Form\FieldsetInterface
+                 ? $this->formCollection($element)
+                 : $this->formRow($element);
+}
+/* if ($hasColumnSizes && $formLayout !== \TwbBundle\Form\View\Helper\TwbBundleForm::LAYOUT_HORIZONTAL) {
+    $formContent = sprintf('<div class="row">%s</div>', $formContent);
+} */
+$formOpenTag = $this->form()->openTag($form);
+/* if (!$formLayout) {
+    $formOpenTag = preg_replace('/form-horizontal/', '', $formOpenTag);
+} */
+
+echo $formOpenTag;
+echo $formContent;
+// echo $this->partial('layout/partials/form_buttons', ['formButtons' => $formButtons, 'footer' => $footer]);
+echo $this->form()->closeTag();

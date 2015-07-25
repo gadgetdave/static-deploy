@@ -1,0 +1,34 @@
+<?php
+$this->headTitle($pageTitle);
+if (isset($scriptConfig['includeFiles']) && is_array($scriptConfig['includeFiles'])):
+    foreach ($scriptConfig['includeFiles'] AS $script):
+        $this->headScript()->appendFile($script);
+    endforeach;
+endif;
+/* 
+echo $this->partial('layout/partials/header_links', ['headerLinks' => $headerLinks]);
+echo $this->partial('messages'); */
+?>
+
+
+<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0">
+    <header role="heading">
+        <?php if ($formIcon) : ?>
+            <span class="widget-icon"> <?php echo $formIcon; ?> </span>
+        <?php elseif ($formIconCls) : ?>
+            <span class="widget-icon"><i class="fa <?php echo $formIconCls; ?>"></i></span>
+        <?php endif; ?>
+        <?php if ($formTitle) : ?>
+            <h2><?php echo $this->escapeHtml($formTitle); ?></h2>
+        <?php endif; ?>
+    </header>
+
+    <div role="content">
+        <div class="widget-body">
+        <?php echo $this->partial(
+                'layout/partials/form',
+                ['form' => $this->form, 'formButtons' => $formButtons]
+            ); ?>
+        </div>
+    </div>
+</div>

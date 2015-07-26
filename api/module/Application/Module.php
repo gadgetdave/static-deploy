@@ -11,10 +11,10 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use MyApp\Entity\Base;
-use MyApp\App\AppResourceListener;
+use StaticDeploy\Entity\Base;
+use StaticDeploy\App\AppResourceListener;
 use Application\App\AppPersistence;
-use MyApp\Resource\Resource;
+use StaticDeploy\Resource\Resource;
 
 class Module
 {

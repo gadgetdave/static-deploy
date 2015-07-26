@@ -1,5 +1,5 @@
 <?php
-namespace MyApp\Controller;
+namespace StaticDeploy\Controller;
 
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;

@@ -10,7 +10,7 @@
 namespace Application\Controller;
 
 use Zend\View\Model\ViewModel;
-use MyApp\Controller\Controller;
+use StaticDeploy\Controller\Controller;
 
 class IndexController extends Controller
 {

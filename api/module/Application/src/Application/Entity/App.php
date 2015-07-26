@@ -3,7 +3,7 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use MyApp\Entity\Base;
+use StaticDeploy\Entity\Base;
 
 /**
  * App

@@ -1,5 +1,5 @@
 <?php
-namespace MyApp\Controller;
+namespace StaticDeploy\Controller;
 
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -131,7 +131,7 @@ abstract class CrudController extends AbstractController
     /**
      * @param string $forceFetch
      * @access protected
-     * @return \MyApp\Controller\unknown|boolean
+     * @return \StaticDeploy\Controller\unknown|boolean
      */
     protected function getEntity($forceFetch = false)
     {

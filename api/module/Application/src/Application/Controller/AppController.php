@@ -11,9 +11,9 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use MyApp\Controller\CrudController;
-use MyApp\Controller\ViewConfig;
-use MyApp\Controller\CrudRestfulController;
+use StaticDeploy\Controller\CrudController;
+use StaticDeploy\Controller\ViewConfig;
+use StaticDeploy\Controller\CrudRestfulController;
 use PhlyRestfully\ResourceController;
 
 class AppController extends ResourceController

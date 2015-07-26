@@ -51,7 +51,7 @@ $loader = new Zend\Loader\StandardAutoloader(
         'fallback_autoloader' => true
     )
 );
-$loader->registerNamespace('MyApp', 'MyApp');
+$loader->registerNamespace('StaticDeploy', 'StaticDeploy');
 $loader->register();
 
 // Run the application!

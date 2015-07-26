@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Resource;
+namespace StaticDeploy\Resource;
 
 use \PhlyRestfully\HalCollection;
 use \PhlyRestfully\ApiProblem;

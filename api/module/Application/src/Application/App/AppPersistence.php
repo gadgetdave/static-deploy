@@ -1,7 +1,7 @@
 <?php
 namespace Application\App;
 
-use MyApp\Resource\AbstractPersistence;
+use StaticDeploy\Resource\AbstractPersistence;
 
 class AppPersistence extends AbstractPersistence
 {

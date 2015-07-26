@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpdox xmlns="http://xml.phpdox.net/config" silent="false">
-    <project name="ZF2 Template" source="${basedir}/../src/MyApp" workdir="${basedir}/../build/phpdox/xml">
+    <project name="ZF2 Template" source="${basedir}/../src/StaticDeploy" workdir="${basedir}/../build/phpdox/xml">
         <!--  @name    - The name of the project -->
         <!--  @source  - The source directory of the application to process -->
         <!--  @workdir - The directory to store the xml data files in -->

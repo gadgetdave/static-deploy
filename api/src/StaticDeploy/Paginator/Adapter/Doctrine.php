@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Paginator\Adapter;
+namespace StaticDeploy\Paginator\Adapter;
 
 use Zend\Paginator\Adapter\AdapterInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;

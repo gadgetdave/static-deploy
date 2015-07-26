@@ -1,6 +1,6 @@
 <?php
 
-namespace MyApp\Entity;
+namespace StaticDeploy\Entity;
 
 use Zend\Db\Sql\Ddl\Column\Datetime;
 

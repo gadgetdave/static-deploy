@@ -1,5 +1,5 @@
 <?php
-namespace MyApp\Resource;
+namespace StaticDeploy\Resource;
 
 use PhlyRestfully\Exception\CreationException;
 use PhlyRestfully\Exception\DomainException;

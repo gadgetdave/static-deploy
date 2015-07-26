@@ -1,5 +1,5 @@
 <?php
-namespace MyApp\Resource;
+namespace StaticDeploy\Resource;
 
 use PhlyRestfully\Exception\CreationException;
 use PhlyRestfully\Exception\DomainException;
@@ -10,9 +10,9 @@ use PhlyRestfully\Resource;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Zend\Paginator\Adapter\ArrayAdapter;
-use MyApp\Paginator\Adapter\Doctrine as DoctrinePaginatorAdapter;
+use StaticDeploy\Paginator\Adapter\Doctrine as DoctrinePaginatorAdapter;
 use Doctrine\ORM\AbstractQuery;
-use MyApp\Entity\Base;
+use StaticDeploy\Entity\Base;
 
 abstract class AbstractPersistence implements PersistenceInterface
 {

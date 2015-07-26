@@ -1,7 +1,7 @@
 <?php
 namespace Application\App;
 
-use MyApp\Resource\AbstractResourceListener;
+use StaticDeploy\Resource\AbstractResourceListener;
 
 class AppResourceListener extends AbstractResourceListener
 {

@@ -4,7 +4,7 @@
  * Enter description here ...
  * @author kingd
  */
-abstract class MyAppTestCase
+abstract class StaticDeployTestCase
     extends \PHPUnit_Extensions_Selenium2TestCase
 {
     /**

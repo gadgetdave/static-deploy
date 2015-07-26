@@ -1,9 +1,9 @@
 <?php
-namespace Application\App;
+namespace Application\Resource\App;
 
 use StaticDeploy\Resource\AbstractPersistence;
 
-class AppPersistence extends AbstractPersistence
+class Persistence extends AbstractPersistence
 {
     /**
      * @var string

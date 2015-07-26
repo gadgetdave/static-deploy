@@ -8,7 +8,7 @@ use StaticDeploy\Entity\Base;
 /**
  * App
  *
- * @ORM\Table(name="app")
+ * @ORM\Table(name="app", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})}, indexes={@ORM\Index(name="deleted", columns={"deleted"})})
  * @ORM\Entity
  */
 class App extends Base
@@ -34,7 +34,7 @@ class App extends Base
      *
      * @ORM\Column(name="config", type="text", length=65535, nullable=false)
      */
-    protected $config;
+    protected $config = '';
 
     /**
      * @var boolean

@@ -12,7 +12,6 @@ CREATE TABLE `app` (
   `updatedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updatedByUserId` varchar(64) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`name`),
   KEY `deleted` (`deleted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

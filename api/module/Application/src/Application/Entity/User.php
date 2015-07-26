@@ -8,7 +8,7 @@ use StaticDeploy\Entity\Base;
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})}, indexes={@ORM\Index(name="deleted", columns={"deleted"})})
  * @ORM\Entity
  */
 class User extends Base
@@ -39,13 +39,6 @@ class User extends Base
     /**
      * @var string
      *
-     * @ORM\Column(name="fullName", type="string", length=255, nullable=false)
-     */
-    protected $fullName;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="firstName", type="string", length=32, nullable=false)
      */
     protected $firstName = '';
@@ -69,7 +62,7 @@ class User extends Base
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    protected $active = '0';
+    protected $active = 0;
 
     /**
      * @var \DateTime
@@ -83,35 +76,35 @@ class User extends Base
      *
      * @ORM\Column(name="confirmed", type="boolean", nullable=false)
      */
-    protected $confirmed = '0';
+    protected $confirmed = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="confCode", type="string", length=100, nullable=false)
      */
-    protected $confcode;
+    protected $confCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="resetToken", type="string", length=127, nullable=true)
      */
-    protected $resettoken;
+    protected $resetToken;
 
     /**
      * @var string
      *
      * @ORM\Column(name="resetCode", type="string", length=127, nullable=true)
      */
-    protected $resetcode;
+    protected $resetCode;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="resetExpiryDate", type="datetime", nullable=false)
      */
-    protected $resetexpirydate = '0000-00-00 00:00:00';
+    protected $resetExpiryDate = '0000-00-00 00:00:00';
 
     /**
      * @var boolean
@@ -128,18 +121,11 @@ class User extends Base
     protected $createdDate = '0000-00-00 00:00:00';
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="createdBy", type="string", length=255, nullable=false)
-     */
-    protected $createdby;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="createdByUserId", type="integer", nullable=false)
      */
-    protected $createdByUserId = '0';
+    protected $createdByUserId = 0;
 
     /**
      * @var \DateTime
@@ -149,18 +135,20 @@ class User extends Base
     protected $updatedDate = '0000-00-00 00:00:00';
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="updatedBy", type="string", length=255, nullable=false)
-     */
-    protected $updatedby;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="updatedByUserId", type="integer", nullable=false)
      */
-    protected $updatedByUserId = '0';
+    protected $updatedByUserId = 0;
+
+    /**
+     * @var array
+     */
+    protected $propertyWhiteList = [
+        'firstName',
+        'lastName',
+        'jobTitle'
+    ];
 
     /**
      * Get userId
@@ -389,99 +377,99 @@ class User extends Base
     }
 
     /**
-     * Set confcode
+     * Set confCode
      *
-     * @param string $confcode
+     * @param string $confCode
      *
      * @return User
      */
-    public function setConfcode($confcode)
+    public function setConfCode($confCode)
     {
-        $this->confcode = $confcode;
+        $this->confCode = $confCode;
 
         return $this;
     }
 
     /**
-     * Get confcode
+     * Get confCode
      *
      * @return string
      */
-    public function getConfcode()
+    public function getConfCode()
     {
-        return $this->confcode;
+        return $this->confCode;
     }
 
     /**
-     * Set resettoken
+     * Set resetToken
      *
-     * @param string $resettoken
+     * @param string $resetToken
      *
      * @return User
      */
-    public function setResettoken($resettoken)
+    public function setResetToken($resetToken)
     {
-        $this->resettoken = $resettoken;
+        $this->resetToken = $resetToken;
 
         return $this;
     }
 
     /**
-     * Get resettoken
+     * Get resetToken
      *
      * @return string
      */
-    public function getResettoken()
+    public function getResetToken()
     {
-        return $this->resettoken;
+        return $this->resetToken;
     }
 
     /**
-     * Set resetcode
+     * Set resetCode
      *
-     * @param string $resetcode
+     * @param string $resetCode
      *
      * @return User
      */
-    public function setResetcode($resetcode)
+    public function setResetCode($resetCode)
     {
-        $this->resetcode = $resetcode;
+        $this->resetCode = $resetCode;
 
         return $this;
     }
 
     /**
-     * Get resetcode
+     * Get resetCode
      *
      * @return string
      */
-    public function getResetcode()
+    public function getResetCode()
     {
-        return $this->resetcode;
+        return $this->resetCode;
     }
 
     /**
-     * Set resetexpirydate
+     * Set resetExpiryDate
      *
-     * @param \DateTime $resetexpirydate
+     * @param \DateTime $resetExpiryDate
      *
      * @return User
      */
-    public function setResetexpirydate($resetexpirydate)
+    public function setResetExpiryDate($resetExpiryDate)
     {
-        $this->resetexpirydate = $resetexpirydate;
+        $this->resetExpiryDate = $resetExpiryDate;
 
         return $this;
     }
 
     /**
-     * Get resetexpirydate
+     * Get resetExpiryDate
      *
      * @return \DateTime
      */
-    public function getResetexpirydate()
+    public function getResetExpiryDate()
     {
-        return $this->resetexpirydate;
+        return $this->resetExpiryDate;
     }
 
     /**

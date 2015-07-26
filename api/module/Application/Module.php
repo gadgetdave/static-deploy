@@ -12,8 +12,8 @@ namespace Application;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use StaticDeploy\Entity\Base;
-use StaticDeploy\App\AppResourceListener;
-use Application\App\AppPersistence;
+use Application\Resource\App\Persistence as AppPersistence;
+use Application\Resource\User\Persistence as UserPersistence;
 use StaticDeploy\Resource\Resource;
 
 class Module
@@ -54,7 +54,12 @@ class Module
                 'AppResourceListener' => function ($services) {
                     $entityManager = $services->get('\Doctrine\ORM\EntityManager');
                     $persistence = new AppPersistence($entityManager);
-                    return new \Application\App\AppResourceListener($persistence);
+                    return new \Application\Resource\App\ResourceListener($persistence);
+                },
+                'UserResourceListener' => function ($services) {
+                    $entityManager = $services->get('\Doctrine\ORM\EntityManager');
+                    $persistence = new UserPersistence($entityManager);
+                    return new \Application\Resource\User\ResourceListener($persistence);
                 },
             ),
         );
@@ -67,9 +72,9 @@ class Module
                 'AppController' => function ($controllers) {
                     $services    = $controllers->getServiceLocator();
 
-                    $persistence = $services->get('AppResourceListener');
+                    $persistence = $services->get('App\ResourceListener');
                     $events      = $services->get('EventManager');
-                    $events->setIdentifiers('Application\App\AppResource');
+//                     $events->setIdentifiers('Application\App\AppResource');
                     $events->attach($persistence);
 
                     $resource    = new Resource();
@@ -93,6 +98,35 @@ class Module
 
                     return $controller;
                 },
+                'UserController' => function ($controllers) {
+                    $services    = $controllers->getServiceLocator();
+
+                    $persistence = $services->get('User\ResourceListener');
+                    $events      = $services->get('EventManager');
+//                     $events->setIdentifiers('Application\User\UserResource');
+                    $events->attach($persistence);
+
+                    $resource    = new Resource();
+                    $resource->setEventManager($events);
+
+                    $controller = new \PhlyRestfully\ResourceController('UserController');
+                    $controller->setResource($resource);
+                    $controller->setRoute('user');
+                    $controller->setIdentifierName('id');
+                    $controller->setCollectionName('users');
+                    $controller->setPageSize(20);
+                    $controller->setCollectionHttpOptions(array(
+                        'GET',
+                        'POST',
+                    ));
+                    $controller->setResourceHttpOptions(array(
+                        'GET',
+                        'PUT',
+                        'DELETE'
+                    ));
+
+                    return $controller;
+                }
             ),
         );
     }

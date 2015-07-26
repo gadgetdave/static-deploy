@@ -32,6 +32,18 @@ return array(
                      ],
                  ],
              ],
+             'user' => [
+                 'type'=> 'segment',
+                 'options' => [
+                     'route' => '/user[/:id]',
+                     'constraints' => [
+                         'id' => '[0-9]+',
+                     ],
+                     'defaults' => [
+                         'controller' => 'UserController',
+                     ],
+                 ],
+             ],
         ),
     ),
     'phlyrestfully' => array(
@@ -46,6 +58,17 @@ return array(
                 'page_size'               => 10,
                 'resource_http_options'   => array('get', 'put'),
                 'route_name'              => 'app',
+            ),
+            'UserResource' => array(
+                'identifier'              => 'User',
+                'listener'                => 'UserResourceListener',
+                'resource_identifiers'    => array('UserResource'),
+                'collection_http_options' => array('get', 'post'),
+                'collection_name'         => 'users',
+                'identifier_name'         => 'id ',
+                'page_size'               => 10,
+                'resource_http_options'   => array('get', 'put'),
+                'route_name'              => 'user',
             ),
         ),
     ),
@@ -71,7 +94,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\App' => 'Application\Controller\AppController'
+            /* 'Application\Controller\App' => 'Application\Controller\AppController',
+            'Application\Controller\User' => 'Application\Controller\UserController' */
         ),
     ),
     'view_manager' => array(

@@ -13,6 +13,7 @@ return array(
         'DoctrineORMModule',
         'ZF\Hal',
         'ZF\ApiProblem',
+        'PhlyRestfully',
         'Application',
     ),
 

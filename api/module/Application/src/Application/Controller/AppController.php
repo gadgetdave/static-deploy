@@ -14,12 +14,8 @@ use Zend\View\Model\ViewModel;
 use MyApp\Controller\CrudController;
 use MyApp\Controller\ViewConfig;
 use MyApp\Controller\CrudRestfulController;
+use PhlyRestfully\ResourceController;
 
-class AppController extends CrudRestfulController
+class AppController extends ResourceController
 {
-    public function __construct()
-    {
-        $this->entityClass = 'Application\\Entity\\App';
-        $this->identifierName = 'appId';
-    }
 }

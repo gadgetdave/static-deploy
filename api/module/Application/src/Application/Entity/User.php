@@ -16,11 +16,11 @@ class User extends Base
     /**
      * @var integer
      *
-     * @ORM\Column(name="userId", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $userId;
+    protected $id;
 
     /**
      * @var string
@@ -167,9 +167,9 @@ class User extends Base
      *
      * @return integer
      */
-    public function getUserId()
+    public function getId()
     {
-        return $this->userId;
+        return $this->id;
     }
 
     /**

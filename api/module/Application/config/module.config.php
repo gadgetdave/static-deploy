@@ -23,15 +23,30 @@ return array(
             'app' => [
                  'type'=> 'segment',
                  'options' => [
-                     'route' => '/app[/:appId]',
+                     'route' => '/app[/:id]',
                      'constraints' => [
-                         'appId' => '[0-9]+',
+                         'id' => '[0-9]+',
                      ],
                      'defaults' => [
-                         'controller' => 'Application\Controller\App',
+                         'controller' => 'AppController',
                      ],
                  ],
              ],
+        ),
+    ),
+    'phlyrestfully' => array(
+        'resources' => array(
+            'AppResource' => array(
+                'identifier'              => 'App',
+                'listener'                => 'AppResourceListener',
+                'resource_identifiers'    => array('AppResource'),
+                'collection_http_options' => array('get', 'post'),
+                'collection_name'         => 'apps',
+                'identifier_name'         => 'id ',
+                'page_size'               => 10,
+                'resource_http_options'   => array('get', 'put'),
+                'route_name'              => 'app',
+            ),
         ),
     ),
     'service_manager' => array(
@@ -105,20 +120,6 @@ return array(
                     'application/json',
                     'application/*+json',
                 ),
-            ),
-        ),
-    ),
-    'phlyrestfully' => array(
-        'resources' => array(
-            'MyApp\App\ApiController' => array(
-                'identifier'              => 'Apps',
-                'listener'                => 'MyApp\App\AppResourceListener',
-                'resource_identifiers'    => array('AppResource'),
-                'collection_http_options' => array('get', 'post'),
-                'collection_name'         => 'apps',
-                'page_size'               => 10,
-                'resource_http_options'   => array('get'),
-                'route_name'              => 'apps',
             ),
         ),
     ),

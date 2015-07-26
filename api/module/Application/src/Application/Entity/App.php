@@ -16,11 +16,11 @@ class App extends Base
     /**
      * @var integer
      *
-     * @ORM\Column(name="appId", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $appId;
+    protected $id;
 
     /**
      * @var string
@@ -41,14 +41,14 @@ class App extends Base
      *
      * @ORM\Column(name="deleted", type="boolean", nullable=false)
      */
-    protected $deleted = '0';
+    protected $deleted = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="deletedByUserId", type="integer", nullable=false)
      */
-    protected $deletedByUserId = '0';
+    protected $deletedByUserId = 0;
 
     /**
      * @var \DateTime
@@ -62,7 +62,7 @@ class App extends Base
      *
      * @ORM\Column(name="createdByUserId", type="string", length=64, nullable=false)
      */
-    protected $createdByUserId;
+    protected $createdByUserId = 0;
 
     /**
      * @var \DateTime
@@ -76,16 +76,24 @@ class App extends Base
      *
      * @ORM\Column(name="updatedByUserId", type="string", length=64, nullable=false)
      */
-    protected $updatedByUserId;
+    protected $updatedByUserId = 0;
+
+    /**
+     * @var array
+     */
+    protected $propertyWhiteList = [
+        'name',
+        'config'
+    ];
 
     /**
      * Get appId
      *
      * @return integer
      */
-    public function getAppId()
+    public function getId()
     {
-        return $this->appId;
+        return $this->id;
     }
 
     /**

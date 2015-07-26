@@ -12,6 +12,9 @@ namespace Application;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use MyApp\Entity\Base;
+use MyApp\App\AppResourceListener;
+use Application\App\AppPersistence;
+use MyApp\Resource\Resource;
 
 class Module
 {
@@ -22,7 +25,7 @@ class Module
         $moduleRouteListener->attach($eventManager);
     }
 
-    public function onRenderEntity($e)
+    /* public function onRenderEntity($e)
     {
         $entity = $e->getParam('entity');
         if (! $entity->entity instanceof Base) {
@@ -37,7 +40,7 @@ class Module
                 'name' => 'my/api/docs',
             ),
         )));
-    }
+    } */
 
     public function getConfig()
     {
@@ -46,12 +49,52 @@ class Module
 
     public function getServiceConfig()
     {
-        return array('factories' => array(
-            'App\AppResourceListener' => function ($services) {
-                $persistence = $services->get('App\AppInterface');
-                return new PasteResourceListener($persistence);
-            },
-        ));
+        return array(
+            'factories' => array(
+                'AppResourceListener' => function ($services) {
+                    $entityManager = $services->get('\Doctrine\ORM\EntityManager');
+                    $persistence = new AppPersistence($entityManager);
+                    return new \Application\App\AppResourceListener($persistence);
+                },
+            ),
+        );
+    }
+
+    public function getControllerConfig()
+    {
+        return array(
+            'factories' => array(
+                'AppController' => function ($controllers) {
+                    $services    = $controllers->getServiceLocator();
+
+                    $persistence = $services->get('AppResourceListener');
+                    $events      = $services->get('EventManager');
+                    $events->setIdentifiers('Application\App\AppResource');
+                    $events->attach($persistence);
+
+                    $resource    = new Resource();
+                    $resource->setEventManager($events);
+
+                    $controller = new \PhlyRestfully\ResourceController('AppController');
+                    $controller->setResource($resource);
+                    $controller->setRoute('app');
+                    $controller->setIdentifierName('id');
+                    $controller->setCollectionName('apps');
+                    $controller->setPageSize(20);
+                    $controller->setCollectionHttpOptions(array(
+                        'GET',
+                        'POST',
+                    ));
+                    $controller->setResourceHttpOptions(array(
+                        'GET',
+                        'PUT',
+                        'DELETE'
+                    ));
+
+                    return $controller;
+                },
+            ),
+        );
     }
 
     public function getAutoloaderConfig()

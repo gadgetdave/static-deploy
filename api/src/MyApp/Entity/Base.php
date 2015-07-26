@@ -2,8 +2,22 @@
 
 namespace MyApp\Entity;
 
+use Zend\Db\Sql\Ddl\Column\Datetime;
+
 abstract class Base
 {
+    /**
+     * @var array
+     */
+    protected $propertyWhiteList = [];
+
+    public function __construct($data = [])
+    {
+        $data = (!empty($data) ? $data : []);
+
+        $this->set($data);
+    }
+
     /**
      * Convert the object to an array.
      * @return array
@@ -14,6 +28,7 @@ abstract class Base
         unset(
             $vars['rawdata'],
             $vars['inputFilter'],
+            $vars['propertyWhiteList'],
             $vars['__initializer__'],
             $vars['__cloner__'],
             $vars['__isInitialized__']
@@ -71,6 +86,11 @@ abstract class Base
             $vars = get_class_vars(get_class($this));
 
             foreach ($data as $key => $val) {
+                // we can only set properties in the whitelist
+                if (!array_key_exists($key, array_flip($this->propertyWhiteList))) {
+                    continue;
+                }
+
                 if (is_array($val) && array_key_exists($key, $vars)) {
                     if (empty($this->$key)) {
                         $className = __NAMESPACE__ . "\\" . $key;
@@ -80,9 +100,13 @@ abstract class Base
                         $obj->set($val);
                         $val = $obj;
                     }
-
                 }
-                $this->$key = $val;
+
+                // we only want to set properties that
+                // have a setter method - ie not 'id'
+                if (method_exists($this, 'set' . ucfirst($key))) {
+                    $this->$key = $val;
+                }
             }
         }
 

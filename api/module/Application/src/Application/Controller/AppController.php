@@ -9,9 +9,17 @@
 
 namespace Application\Controller;
 
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use MyApp\Controller\Controller;
+use MyApp\Controller\CrudController;
+use MyApp\Controller\ViewConfig;
+use MyApp\Controller\CrudRestfulController;
 
-class IndexController extends Controller
+class AppController extends CrudRestfulController
 {
+    public function __construct()
+    {
+        $this->entityClass = 'Application\\Entity\\App';
+        $this->identifierName = 'appId';
+    }
 }

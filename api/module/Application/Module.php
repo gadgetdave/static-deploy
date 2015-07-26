@@ -11,6 +11,7 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use MyApp\Entity\Base;
 
 class Module
 {
@@ -21,9 +22,36 @@ class Module
         $moduleRouteListener->attach($eventManager);
     }
 
+    public function onRenderEntity($e)
+    {
+        $entity = $e->getParam('entity');
+        if (! $entity->entity instanceof Base) {
+            // do nothing
+            return;
+        }
+
+        // Add a "describedBy" relational link
+        $entity->getLinks()->add(\ZF\Hal\Link\Link::factory(array(
+            'rel' => 'describedBy',
+            'route' => array(
+                'name' => 'my/api/docs',
+            ),
+        )));
+    }
+
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    public function getServiceConfig()
+    {
+        return array('factories' => array(
+            'App\AppResourceListener' => function ($services) {
+                $persistence = $services->get('App\AppInterface');
+                return new PasteResourceListener($persistence);
+            },
+        ));
     }
 
     public function getAutoloaderConfig()

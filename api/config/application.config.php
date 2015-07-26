@@ -11,7 +11,8 @@ return array(
         'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
-        'Admin',
+        'ZF\Hal',
+        'ZF\ApiProblem',
         'Application',
     ),
 

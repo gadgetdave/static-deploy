@@ -20,36 +20,18 @@ return array(
                     ),
                 ),
             ),
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/application',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+            'app' => [
+                 'type'=> 'segment',
+                 'options' => [
+                     'route' => '/app[/:appId]',
+                     'constraints' => [
+                         'appId' => '[0-9]+',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Application\Controller\App',
+                     ],
+                 ],
+             ],
         ),
     ),
     'service_manager' => array(
@@ -73,7 +55,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\App' => 'Application\Controller\AppController'
         ),
     ),
     'view_manager' => array(
@@ -82,12 +65,15 @@ return array(
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
-        'template_map' => array(
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
+        /* 'template_map' => array(
             'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
-        ),
+        ), */
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
@@ -99,56 +85,40 @@ return array(
             ),
         ),
     ),
-    'assetic_configuration' => array(
-        'debug' => true,
-        'buildOnRequest' => true,
-
-        'webPath' => realpath('public/assets'),
-        'basePath' => 'assets',
-
-        'routes' => array(
-            'home' => array(
-                '@base_js',
-                '@base_css',
-            ),
+    'doctrine' => array(
+      'driver' => array(
+        'application_entities' => array(
+          'class' =>'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+          'cache' => 'array',
+          'paths' => array(__DIR__ . '/../src/Application/Entity')
         ),
 
-        'modules' => array(
-            'application' => array(
-                'root_path' => __DIR__ . '/../assets',
-                'collections' => array(
-                    'base_css' => array(
-                        'assets' => array(
-                            'css/bootstrap-theme.min.css',
-                            'css/style.css',
-                            'css/bootstrap.min.css'
-                        ),
-                        'filters' => array(
-                            'CssRewriteFilter' => array(
-                                'name' => 'Assetic\Filter\CssRewriteFilter'
-                            )
-                        ),
-                    ),
-
-                    'base_js' => array(
-                        'assets' => array(
-                            'js/html5shiv.min.js',
-//                             'js/jquery.min.js',
-//                             'js/respond.min.js',
-//                             'js/bootstrap.min.js',
-                        )
-                    ),
-
-                    'base_images' => array(
-                        'assets' => array(
-                            'img/*.png',
-                            'img/*.ico',
-                        ),
-                        'options' => array(
-                            'move_raw' => true,
-                        )
-                    ),
+        'orm_default' => array(
+          'drivers' => array(
+            'Application\Entity' => 'application_entities'
+          )
+    ))),
+    'zf-content-negotiation' => array(
+        'selectors' => array(
+            'HalJson' => array(
+                'ZF\Hal\View\HalJsonModel' => array(
+                    'application/json',
+                    'application/*+json',
                 ),
+            ),
+        ),
+    ),
+    'phlyrestfully' => array(
+        'resources' => array(
+            'MyApp\App\ApiController' => array(
+                'identifier'              => 'Apps',
+                'listener'                => 'MyApp\App\AppResourceListener',
+                'resource_identifiers'    => array('AppResource'),
+                'collection_http_options' => array('get', 'post'),
+                'collection_name'         => 'apps',
+                'page_size'               => 10,
+                'resource_http_options'   => array('get'),
+                'route_name'              => 'apps',
             ),
         ),
     ),

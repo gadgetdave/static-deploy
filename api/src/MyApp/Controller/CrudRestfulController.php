@@ -9,6 +9,8 @@ use Zend\Form\Form;
 use Zend\Form\Element\Checkbox;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Doctrine\ORM\Query;
+use ZF\Hal\View\HalJsonModel;
+use ZF\Hal\Entity;
 
 abstract class CrudRestfulController extends AbstractRestfulController
 {
@@ -76,16 +78,18 @@ abstract class CrudRestfulController extends AbstractRestfulController
             $this->entityClass
         );
 
-        $items = [];
-        foreach ($repository->findAll() as $row) {
-            $items[] = $row->toArray();
-        }
+        $items = array_map(function ($item) {
+            return $item->toArray();
+        }, $repository->findAll());
 
         $data = [
             'data' => $items
         ];
 
-        return new JsonModel($data);
+        $response = new HalJsonModel();
+        $response->setPayload($data);
+
+        return $response;
     }
 
     /**
@@ -97,9 +101,12 @@ abstract class CrudRestfulController extends AbstractRestfulController
         // Action used for GET requests with resource Id
         $repository = $this->getEntityManager()->getRepository($this->entityClass);
 
-        $entity = $repository->findOneBy([$this->identifierName => $id]);
+        $entity = new Entity($repository->findOneBy([$this->identifierName => $id])->toArray(), $id);
 
-        return new JsonModel(['data' => $entity->toArray()]);
+        $a = new HalJsonModel();
+        $a->setVariable('entity', $repository->findOneBy([$this->identifierName => $id])->toArray());
+
+        return $a;
     }
 
     /**

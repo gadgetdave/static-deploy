@@ -265,11 +265,23 @@ abstract class AbstractPersistence implements PersistenceInterface
     {
         $entityManager = $this->getEntityManager();
 
-        $dql = "SELECT e FROM " . $this->entityClass . ' e WHERE e.deleted = 0';
-        $query = $entityManager->createQuery($dql)
-                               ->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
+        $entity = new $this->entityClass([]);
+        $propertWhiteList = $entity->getPropertyWhiteList();
 
-        $adapter = new DoctrinePaginatorAdapter(new Paginator($query, false));
+        /* $dql = "SELECT e." . implode(', e.', $propertWhiteList[Base::PROPERTY_WHITE_LIST_TYPE_GET])
+             . " FROM " . $this->entityClass . ' e WHERE e.deleted = 0'; */
+
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select(['e'])
+            ->from($this->entityClass, 'e')
+            ->where($qb->expr()->eq('e.deleted', '0'));
+
+        $query = $qb->getQuery()
+                    ->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
+        /* $query = $entityManager->createQuery($dql)
+                               ->setHydrationMode(AbstractQuery::HYDRATE_ARRAY); */
+
+        $adapter = new DoctrinePaginatorAdapter(new Paginator($query, false), $propertWhiteList[Base::PROPERTY_WHITE_LIST_TYPE_GET]);
         $paginator = new \Zend\Paginator\Paginator($adapter);
 
         return $paginator;

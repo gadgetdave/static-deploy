@@ -145,9 +145,18 @@ class User extends Base
      * @var array
      */
     protected $propertyWhiteList = [
-        'firstName',
-        'lastName',
-        'jobTitle'
+        self::PROPERTY_WHITE_LIST_TYPE_GET => [
+            'id',
+            'firstName',
+            'lastName',
+            'jobTitle',
+            'createdDate'
+        ],
+        self::PROPERTY_WHITE_LIST_TYPE_SET => [
+            'firstName',
+            'lastName',
+            'jobTitle'
+        ]
     ];
 
     /**

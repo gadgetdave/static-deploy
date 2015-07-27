@@ -82,8 +82,15 @@ class App extends Base
      * @var array
      */
     protected $propertyWhiteList = [
-        'name',
-        'config'
+        self::PROPERTY_WHITE_LIST_TYPE_GET => [
+            'id',
+            'name',
+            'createdDate'
+        ],
+        self::PROPERTY_WHITE_LIST_TYPE_SET => [
+            'name',
+            'config'
+        ]
     ];
 
     /**

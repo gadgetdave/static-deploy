@@ -6,10 +6,16 @@ use Zend\Db\Sql\Ddl\Column\Datetime;
 
 abstract class Base
 {
+    const PROPERTY_WHITE_LIST_TYPE_GET = 'get';
+    const PROPERTY_WHITE_LIST_TYPE_SET = 'set';
+
     /**
      * @var array
      */
-    protected $propertyWhiteList = [];
+    protected $propertyWhiteList = [
+        self::PROPERTY_WHITE_LIST_TYPE_GET => [],
+        self::PROPERTY_WHITE_LIST_TYPE_SET => []
+    ];
 
     public function __construct($data = [])
     {
@@ -19,7 +25,16 @@ abstract class Base
     }
 
     /**
+     * @return array
+     */
+    public function getPropertyWhiteList()
+    {
+        return $this->propertyWhiteList;
+    }
+
+    /**
      * Convert the object to an array.
+     *
      * @return array
      */
     public function toArray()
@@ -35,6 +50,15 @@ abstract class Base
         );
 
         foreach ($vars as $property => $value) {
+            // we only want to return the whitelist properties
+            if (!array_key_exists(
+                $property,
+                array_flip($this->propertyWhiteList[self::PROPERTY_WHITE_LIST_TYPE_GET])
+            )) {
+                unset($vars[$property]);
+                continue;
+            }
+
             switch (true) {
                 case $value instanceof \DateTime :
                     $vars[$property] = $value->format(\DateTime::ISO8601);
@@ -87,7 +111,7 @@ abstract class Base
 
             foreach ($data as $key => $val) {
                 // we can only set properties in the whitelist
-                if (!array_key_exists($key, array_flip($this->propertyWhiteList))) {
+                if (!array_key_exists($key, array_flip($this->propertyWhiteList[self::PROPERTY_WHITE_LIST_TYPE_SET]))) {
                     continue;
                 }
 

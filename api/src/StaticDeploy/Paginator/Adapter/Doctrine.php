@@ -10,13 +10,17 @@ class Doctrine implements AdapterInterface
     protected $paginator;
     protected $count;
 
+    protected $allowedProperties;
+
     /**
      * @param Paginator $paginator
      */
-    public function __construct(Paginator $paginator)
+    public function __construct(Paginator $paginator, array $allowedProperties = array())
     {
         $this->paginator = $paginator;
         $this->count = count($paginator);
+
+        $this->allowedProperties = $allowedProperties;
     }
 
     /**
@@ -28,7 +32,18 @@ class Doctrine implements AdapterInterface
         $this->paginator->getQuery()->setFirstResult($offset)
                                     ->setMaxResults($itemCountPerPage);
 
-        return $this->paginator->getIterator();
+        $iterator = $this->paginator->getIterator();
+        $flippedProperties = array_flip($this->allowedProperties);
+
+        foreach ($iterator as &$row) {
+            foreach ($row as $key => $value) {
+                if (!array_key_exists($key, $flippedProperties)) {
+                    unset($row[$key]);
+                }
+            }
+        }
+
+        return $iterator;
     }
 
     /**

@@ -13,6 +13,8 @@ return array(
         'DoctrineORMModule',
         'ZF\Hal',
         'ZF\ApiProblem',
+        'ZF\ContentNegotiation',
+        'ZF\OAuth2',
         'PhlyRestfully',
         'Application',
     ),

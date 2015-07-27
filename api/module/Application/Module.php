@@ -15,6 +15,10 @@ use StaticDeploy\Entity\Base;
 use Application\Resource\App\Persistence as AppPersistence;
 use Application\Resource\User\Persistence as UserPersistence;
 use StaticDeploy\Resource\Resource;
+use OAuth2\Server;
+use OAuth2\Request as OAuth2Request;
+use Zend\Console\Console;
+use StaticDeploy\Controller\ResourceController;
 
 class Module
 {
@@ -74,13 +78,13 @@ class Module
 
                     $persistence = $services->get('App\ResourceListener');
                     $events      = $services->get('EventManager');
-//                     $events->setIdentifiers('Application\App\AppResource');
                     $events->attach($persistence);
 
                     $resource    = new Resource();
                     $resource->setEventManager($events);
 
-                    $controller = new \PhlyRestfully\ResourceController('AppController');
+                    $oAuth2Server = $services->get('ZF\OAuth2\Service\OAuth2Server');
+                    $controller = new ResourceController($oAuth2Server, 'AppController');
                     $controller->setResource($resource);
                     $controller->setRoute('app');
                     $controller->setIdentifierName('id');
@@ -103,13 +107,13 @@ class Module
 
                     $persistence = $services->get('User\ResourceListener');
                     $events      = $services->get('EventManager');
-//                     $events->setIdentifiers('Application\User\UserResource');
                     $events->attach($persistence);
 
                     $resource    = new Resource();
                     $resource->setEventManager($events);
 
-                    $controller = new \PhlyRestfully\ResourceController('UserController');
+                    $oAuth2Server = $services->get('ZF\OAuth2\Service\OAuth2Server');
+                    $controller = new ResourceController($oAuth2Server, 'UserController');
                     $controller->setResource($resource);
                     $controller->setRoute('user');
                     $controller->setIdentifierName('id');

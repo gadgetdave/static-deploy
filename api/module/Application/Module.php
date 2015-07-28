@@ -29,23 +29,6 @@ class Module
         $moduleRouteListener->attach($eventManager);
     }
 
-    /* public function onRenderEntity($e)
-    {
-        $entity = $e->getParam('entity');
-        if (! $entity->entity instanceof Base) {
-            // do nothing
-            return;
-        }
-
-        // Add a "describedBy" relational link
-        $entity->getLinks()->add(\ZF\Hal\Link\Link::factory(array(
-            'rel' => 'describedBy',
-            'route' => array(
-                'name' => 'my/api/docs',
-            ),
-        )));
-    } */
-
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
@@ -57,12 +40,14 @@ class Module
             'factories' => array(
                 'AppResourceListener' => function ($services) {
                     $entityManager = $services->get('\Doctrine\ORM\EntityManager');
-                    $persistence = new AppPersistence($entityManager);
+                    $oAuth2ServerFactory = $services->get('ZF\OAuth2\Service\OAuth2Server');
+                    $persistence = new AppPersistence($entityManager, $oAuth2ServerFactory);
                     return new \Application\Resource\App\ResourceListener($persistence);
                 },
                 'UserResourceListener' => function ($services) {
                     $entityManager = $services->get('\Doctrine\ORM\EntityManager');
-                    $persistence = new UserPersistence($entityManager);
+                    $oAuth2ServerFactory = $services->get('ZF\OAuth2\Service\OAuth2Server');
+                    $persistence = new UserPersistence($entityManager, $oAuth2ServerFactory);
                     return new \Application\Resource\User\ResourceListener($persistence);
                 },
             ),

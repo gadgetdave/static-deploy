@@ -13,6 +13,10 @@ use Zend\Paginator\Adapter\ArrayAdapter;
 use StaticDeploy\Paginator\Adapter\Doctrine as DoctrinePaginatorAdapter;
 use Doctrine\ORM\AbstractQuery;
 use StaticDeploy\Entity\Base;
+use OAuth2\Server;
+use ZF\OAuth2\Factory\OAuth2ServerFactory;
+use OAuth2\Request;
+use ZF\OAuth2\Factory\OAuth2ServerInstanceFactory;
 
 abstract class AbstractPersistence implements PersistenceInterface
 {
@@ -36,8 +40,19 @@ abstract class AbstractPersistence implements PersistenceInterface
      */
     protected $identifierName = 'id';
 
-    public function __construct(EntityManager $em)
+    /**
+     * @var OAuth2ServerFactory
+     */
+    protected $serverFactory;
+
+    /**
+     * @var unknown
+     */
+    protected $server;
+
+    public function __construct(EntityManager $em, OAuth2ServerInstanceFactory $serverFactory)
     {
+        $this->serverFactory = $serverFactory;
         $this->entityManager = $em;
     }
 
@@ -74,9 +89,9 @@ abstract class AbstractPersistence implements PersistenceInterface
             $entity->setUpdatedDate(new \DateTime());
         }
 
-        /**
-         * @todo add user create set methods here when we have users set up
-         */
+        if (method_exists($entity, 'setCreatedByUserId')) {
+            $entity->setCreatedByUserId($this->getOAuth2Identity()['user_id']);
+        }
 
         return true;
     }
@@ -106,9 +121,9 @@ abstract class AbstractPersistence implements PersistenceInterface
             $entity->setUpdatedDate(new \DateTime());
         }
 
-        /**
-         * @todo add user create set methods here when we have users set up
-         */
+        if (method_exists($entity, 'setUpdatedByUserId')) {
+            $entity->setUpdatedByUserId($this->getOAuth2Identity()['user_id']);
+        }
 
         return true;
     }
@@ -135,12 +150,12 @@ abstract class AbstractPersistence implements PersistenceInterface
         // *** careful we are assuming standard nameing conventions
         // *** assumption is the mother of all f*** ups
         if (method_exists($entity, 'setDeletedDate')) {
-            $entity->setUpdatedDate(new \DateTime());
+            $entity->setDeletedDate(new \DateTime());
         }
 
-        /**
-         * @todo add user delete set methods here when we have users set up
-         */
+        if (method_exists($entity, 'setDeletedByUserId')) {
+            $entity->setDeletedByUserId($this->getOAuth2Identity()['user_id']);
+        }
 
         return true;
     }
@@ -319,5 +334,45 @@ abstract class AbstractPersistence implements PersistenceInterface
         }
 
         return true;
+    }
+
+    protected function getOAuth2Identity()
+    {
+        if ($this->oAuth2Identity !== null) {
+            return $this->oAuth2Identity;
+        }
+
+        $request = Request::createFromGlobals();
+        $server = $this->getOAuth2Server(null);
+        $this->oAuth2Identity = $server->getAccessTokenData($request);
+
+        return $this->oAuth2Identity;
+    }
+
+    /**
+     * Retrieve the OAuth2\Server instance.
+     *
+     * If not already created by the composed $serverFactory, that callable
+     * is invoked with the provided $type as an argument, and the value
+     * returned.
+     *
+     * @param string $type
+     * @return OAuth2Server
+     * @throws RuntimeException if the factory does not return an OAuth2Server instance.
+     */
+    protected function getOAuth2Server($type)
+    {
+        if ($this->server instanceof Server) {
+            return $this->server;
+        }
+        $server = call_user_func($this->serverFactory, $type);
+        if (! $server instanceof Server) {
+            throw new \RuntimeException(sprintf(
+                'OAuth2\Server factory did not return a valid instance; received %s',
+                (is_object($server) ? get_class($server) : gettype($server))
+            ));
+        }
+        $this->server = $server;
+        return $server;
     }
 }

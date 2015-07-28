@@ -44,6 +44,13 @@ class App extends Base
     protected $deleted = 0;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="deletedDate", type="datetime", nullable=false)
+     */
+    protected $deletedDate = '0000-00-00 00:00:00';
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="deletedByUserId", type="integer", nullable=false)
@@ -173,6 +180,30 @@ class App extends Base
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Set deletedDate
+     *
+     * @param \DateTime $updatedDate
+     *
+     * @return App
+     */
+    public function setDeletedDate($deletedDate)
+    {
+        $this->deletedDate = $deletedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedDate
+     *
+     * @return \DateTime
+     */
+    public function getDeletedDate()
+    {
+        return $this->deletedDate;
     }
 
     /**

@@ -46,17 +46,7 @@ class ResourceController extends PhlyRestfullyResourceController
     }
 
     /**
-     * Handle the dispatch event
-     *
-     * Does several "pre-flight" checks:
-     * - Raises an exception if no resource is composed.
-     * - Raises an exception if no route is composed.
-     * - Returns a 405 response if the current HTTP request method is not in
-     *   $options
-     *
-     * When the dispatch is complete, it will check to see if an array was
-     * returned; if so, it will cast it to a view model using the
-     * AcceptableViewModelSelector plugin, and the $acceptCriteria property.
+     * Handle the dispatch event - in this case we are authenticate the request
      *
      * @param  MvcEvent $e
      * @return mixed
@@ -69,7 +59,7 @@ class ResourceController extends PhlyRestfullyResourceController
         if (!$server->verifyResourceRequest($this->getOAuth2Request())) {
             // Not authorized return 401 error
             $viewModel = $this->acceptableViewModelSelector($this->acceptCriteria);
-            $viewModel->setVariables(array('payload' => new ApiProblem(401, "Invalid ")));
+            $viewModel->setVariables(array('payload' => new ApiProblem(401, "Invalid Access Token")));
 
             if ($viewModel instanceof RestfulJsonModel) {
                 $viewModel->setTerminal(true);

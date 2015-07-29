@@ -44,6 +44,18 @@ return array(
                      ],
                  ],
              ],
+             'auth' => [
+                 'type'=> 'segment',
+                 'options' => [
+                     'route' => '/auth[/:id]',
+                     'constraints' => [
+                         'id' => '[0-9]+',
+                     ],
+                     'defaults' => [
+                         'controller' => 'AuthController',
+                     ],
+                 ],
+             ],
         ),
     ),
     'phlyrestfully' => array(

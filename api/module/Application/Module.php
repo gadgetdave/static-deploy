@@ -115,6 +115,30 @@ class Module
                     ));
 
                     return $controller;
+                },
+                'AuthController' => function ($controllers) {
+                    $services    = $controllers->getServiceLocator();
+
+                    $persistence = $services->get('OAuthClient\ResourceListener');
+                    $events      = $services->get('EventManager');
+                    $events->attach($persistence);
+
+                    $resource    = new Resource();
+                    $resource->setEventManager($events);
+
+                    $oAuth2Server = $services->get('ZF\OAuth2\Service\OAuth2Server');
+                    $controller = new ResourceController($oAuth2Server, 'AuthController');
+                    $controller->setResource($resource);
+                    $controller->setRoute('auth');
+                    $controller->setIdentifierName('user_id');
+                    $controller->setPageSize(20);
+                    $controller->setCollectionHttpOptions(array(
+                    ));
+                    $controller->setResourceHttpOptions(array(
+                        'POST'
+                    ));
+
+                    return $controller;
                 }
             ),
         );

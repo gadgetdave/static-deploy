@@ -276,7 +276,7 @@ abstract class AbstractPersistence implements PersistenceInterface
      * (non-PHPdoc)
      * @see \Application\App\PersistenceInterface::fetchAll()
      */
-    public function fetchAll()
+    public function fetchAll(array $data)
     {
         $entityManager = $this->getEntityManager();
 

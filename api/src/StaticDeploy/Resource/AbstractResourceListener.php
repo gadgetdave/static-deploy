@@ -95,6 +95,6 @@ abstract class AbstractResourceListener extends AbstractListenerAggregate
      */
     public function onFetchAll(ResourceEvent $e)
     {
-        return $this->persistence->fetchAll();
+        return $this->persistence->fetchAll($e->getQueryParams());
     }
 }

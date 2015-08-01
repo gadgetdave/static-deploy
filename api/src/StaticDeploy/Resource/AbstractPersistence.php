@@ -17,6 +17,7 @@ use OAuth2\Server;
 use ZF\OAuth2\Factory\OAuth2ServerFactory;
 use OAuth2\Request;
 use ZF\OAuth2\Factory\OAuth2ServerInstanceFactory;
+use Doctrine\ORM\QueryBuilder;
 
 abstract class AbstractPersistence implements PersistenceInterface
 {
@@ -283,20 +284,22 @@ abstract class AbstractPersistence implements PersistenceInterface
         $entity = new $this->entityClass([]);
         $propertWhiteList = $entity->getPropertyWhiteList();
 
-        /* $dql = "SELECT e." . implode(', e.', $propertWhiteList[Base::PROPERTY_WHITE_LIST_TYPE_GET])
-             . " FROM " . $this->entityClass . ' e WHERE e.deleted = 0'; */
-
         $qb = $entityManager->createQueryBuilder();
         $qb->select(['e'])
-            ->from($this->entityClass, 'e')
-            ->where($qb->expr()->eq('e.deleted', '0'));
+           ->from($this->entityClass, 'e')
+           ->where($qb->expr()->eq('e.deleted', '0'));
+
+        // pass query builder to search filter which will be defined
+        // in the child class if necessary
+        $this->searchFilter($qb, $data);
 
         $query = $qb->getQuery()
                     ->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
-        /* $query = $entityManager->createQuery($dql)
-                               ->setHydrationMode(AbstractQuery::HYDRATE_ARRAY); */
 
-        $adapter = new DoctrinePaginatorAdapter(new Paginator($query, false), $propertWhiteList[Base::PROPERTY_WHITE_LIST_TYPE_GET]);
+        $adapter = new DoctrinePaginatorAdapter(
+            new Paginator($query, false),
+            $propertWhiteList[Base::PROPERTY_WHITE_LIST_TYPE_GET]
+        );
         $paginator = new \Zend\Paginator\Paginator($adapter);
 
         return $paginator;
@@ -375,4 +378,14 @@ abstract class AbstractPersistence implements PersistenceInterface
         $this->server = $server;
         return $server;
     }
+
+    /**
+     * This is intended to be overidden by child class to apply entity specific filtering
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param array data
+     *
+     * @return void
+     */
+    protected function searchFilter(QueryBuilder &$queryBuilder, array $data) {}
 }

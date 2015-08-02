@@ -18,6 +18,7 @@ use ZF\OAuth2\Factory\OAuth2ServerFactory;
 use OAuth2\Request;
 use ZF\OAuth2\Factory\OAuth2ServerInstanceFactory;
 use Doctrine\ORM\QueryBuilder;
+use Zend\Debug\Debug;
 
 abstract class AbstractPersistence implements PersistenceInterface
 {
@@ -387,5 +388,11 @@ abstract class AbstractPersistence implements PersistenceInterface
      *
      * @return void
      */
-    protected function searchFilter(QueryBuilder &$queryBuilder, array $data) {}
+    protected function searchFilter(QueryBuilder &$queryBuilder, array $data)
+    {
+        foreach ($data as $key => $value) {
+            $queryBuilder->where($queryBuilder->expr()->eq('e.' . $key, '?1'));
+            $queryBuilder->setParameter(1, $value);
+        }
+    }
 }

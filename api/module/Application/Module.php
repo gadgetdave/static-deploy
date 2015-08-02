@@ -19,6 +19,8 @@ use OAuth2\Server;
 use OAuth2\Request as OAuth2Request;
 use Zend\Console\Console;
 use StaticDeploy\Controller\ResourceController;
+use Zend\Debug\Debug;
+use Zend\Stdlib\Parameters;
 
 class Module
 {
@@ -85,6 +87,12 @@ class Module
                         'DELETE'
                     ));
 
+                    $sharedEvents = $events->getSharedManager();
+                    $sharedEvents->attach('AppController', 'getList.pre', function ($e) {
+                        $e->getTarget()->getResource()->setQueryParams(
+                            new Parameters($e->getTarget()->params()->fromQuery())
+                        );
+                    });
                     return $controller;
                 },
                 'UserController' => function ($controllers) {

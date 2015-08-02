@@ -73,6 +73,50 @@ class ResourceController extends PhlyRestfullyResourceController
         return parent::onDispatch($e);
     }
 
+
+    /**
+     * Return collection of resources
+     *
+     * @return Response|HalCollection
+     */
+    public function getList()
+    {
+        if (!$this->isMethodAllowedForCollection()) {
+            return $this->createMethodNotAllowedResponse($this->collectionHttpOptions);
+        }
+
+        $events = $this->getEventManager();
+        $events->trigger('getList.pre', $this, array());
+
+        try {
+            $collection = $this->resource->fetchAll($this->params()->fromQuery());
+        } catch (\Exception $e) {
+            $code = $e->getCode() ?: 500;
+
+            return new ApiProblem($code, $e);
+        }
+
+        if ($collection instanceof ApiProblem) {
+            return $collection;
+        }
+
+        $plugin     = $this->plugin('HalLinks');
+        $collection = $plugin->createCollection($collection, $this->route);
+        $collection->setCollectionRoute($this->route);
+        $collection->setIdentifierName($this->getIdentifierName());
+        $collection->setResourceRoute($this->route);
+        $collection->setPage($this->getRequest()->getQuery('page', 1));
+        $collection->setCollectionName($this->collectionName);
+
+        $pageSize = $this->pageSizeParam
+        ? $this->getRequest()->getQuery($this->pageSizeParam, $this->pageSize)
+        : $this->pageSize;
+        $collection->setPageSize($pageSize);
+
+        $events->trigger('getList.post', $this, array('collection' => $collection));
+        return $collection;
+    }
+
     /**
      * Create an OAuth2 request based on the ZF2 request object
      *

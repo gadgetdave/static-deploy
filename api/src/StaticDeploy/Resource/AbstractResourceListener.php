@@ -6,6 +6,7 @@ use PhlyRestfully\Exception\DomainException;
 use PhlyRestfully\ResourceEvent;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\Debug\Debug;
 
 abstract class AbstractResourceListener extends AbstractListenerAggregate
 {
@@ -95,6 +96,6 @@ abstract class AbstractResourceListener extends AbstractListenerAggregate
      */
     public function onFetchAll(ResourceEvent $e)
     {
-        return $this->persistence->fetchAll($e->getQueryParams());
+        return $this->persistence->fetchAll($e->getQueryParams()->toArray());
     }
 }

@@ -111,7 +111,10 @@ abstract class Base
 
             foreach ($data as $key => $val) {
                 // we can only set properties in the whitelist
-                if (!array_key_exists($key, array_flip($this->propertyWhiteList[self::PROPERTY_WHITE_LIST_TYPE_SET]))) {
+                if (!array_key_exists(
+                    $key,
+                    array_flip($this->propertyWhiteList[self::PROPERTY_WHITE_LIST_TYPE_SET]))
+                ) {
                     continue;
                 }
 

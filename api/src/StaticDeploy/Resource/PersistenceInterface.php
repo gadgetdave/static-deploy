@@ -21,9 +21,11 @@ interface PersistenceInterface
     public function fetch($id);
 
     /**
+     * @param array $data
+     *
      * @return array
      */
-    public function fetchAll();
+    public function fetchAll(array $data);
 
     /**
      * @param string | int $id

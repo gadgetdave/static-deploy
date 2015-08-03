@@ -121,7 +121,13 @@ class Module
                         'PUT',
                         'DELETE'
                     ));
-
+                    $sharedEvents = $events->getSharedManager();
+                    $sharedEvents->attach('AppController', 'getList.pre', function ($e) {
+                        $e->getTarget()->getResource()->setQueryParams(
+                            new Parameters($e->getTarget()->params()->fromQuery())
+                        );
+                    });
+                    
                     return $controller;
                 },
                 'AuthController' => function ($controllers) {
@@ -145,7 +151,13 @@ class Module
                     $controller->setResourceHttpOptions(array(
                         'POST'
                     ));
-
+                    $sharedEvents = $events->getSharedManager();
+                    $sharedEvents->attach('AppController', 'getList.pre', function ($e) {
+                        $e->getTarget()->getResource()->setQueryParams(
+                            new Parameters($e->getTarget()->params()->fromQuery())
+                        );
+                    });
+                    
                     return $controller;
                 }
             ),

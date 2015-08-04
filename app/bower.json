@@ -1,0 +1,17 @@
+{
+    "name": "Static Deploy",
+    "homepage": "https:\/\/www.rollnapi.com",
+    "authors": [
+        "Dave King"
+    ],
+    "private": true,
+    "dependencies": {
+        "angular": "*",
+        "angular-bootstrap": "*",
+        "angular-loading-bar": "*",
+        "angular-resource": "*",
+        "angular-ui-grid": "*",
+        "angular-ui-router": "*",
+        "ng-table": "*"
+    }
+}

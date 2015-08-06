@@ -9,6 +9,6 @@ var app = angular.module(
         'ngTable',
         'angular-loading-bar',
         'ngResource',
-        'myApp.services'
+        'oc.lazyLoad'
     ]
 );

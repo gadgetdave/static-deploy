@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module(
-    'myApp',
+    'staticDeploy',
     [
         'ui.bootstrap', 
         'ui.router',

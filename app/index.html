@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="staticDeploy">
     <head>
-	    <meta charset="utf-8">
-	    <title>Static Deploy</title>
+        <meta charset="utf-8">
+        <title>Static Deploy</title>
 
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	    
-	    <link href="/bower_components/angular-loading-bar/src/loading-bar.css" media="screen" rel="stylesheet" type="text/css">
-	    <link href="/bower_components/angular-ui-grid/ui-grid.css" media="screen" rel="stylesheet" type="text/css">
-	    <!-- <link href="/assets/base_css.css" media="screen" rel="stylesheet" type="text/css">
-	    <link href="/assets/admin_css.css" media="screen" rel="stylesheet" type="text/css"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                
+        <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/assets/styles/main.css">
+        <link rel="stylesheet" href="/assets/styles/sb-admin-2.css">
+        <link rel="stylesheet" href="/assets/styles/timeline.css">
+        
+        <link href="/bower_components/angular-loading-bar/src/loading-bar.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="/bower_components/angular-ui-grid/ui-grid.css" media="screen" rel="stylesheet" type="text/css">
+        <!-- <link href="/assets/base_css.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="/assets/admin_css.css" media="screen" rel="stylesheet" type="text/css"> -->
     </head>
     <body>
+    <div id="wrapper">
+
+        <!-- Navigation -->
+            
         <navigation></navigation>
-        <div class="container">
-            <hr>
-            <div ui-view></div>
-            <footer>
-            </footer>
-        </div> <!-- /container -->
+        <!-- /.navbar-top-links -->
+        
+               
+        <!-- /.navbar-static-side -->
+
+            <div id="page-wrapper" style="min-height: 561px;">
+
+                <div ui-view></div>
+                
+            </div>
+            <!-- /#page-wrapper -->
+    </div>
+
     </body>
         
     <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
